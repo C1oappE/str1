@@ -1,0 +1,16 @@
+#修改端口
+server:
+  port: 8989
+#springboot整合mybatis
+spring:
+  datasource:
+    username: root
+    password: 242431
+    url: jdbc:mysql://localhost:3306/sdr?useUnicode=true&characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#mybatis相关配置,如果在xml中写入SQL，该配置必须有
+mybatis:
+  type-aliases-package: com.bmd.sdrhelper.entity #对应实体类的路径
+  mapper-locations: classpath:mappers/*.xml #指定myBatis的核心配置文件与Mapper映射文件
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #SQL日志(输出到控制台)

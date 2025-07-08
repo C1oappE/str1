@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace:映射文件的命名空间指向的是映射器的全名(包名.类名)-->
+<mapper namespace="com.bmd.sdrhelper.mapper.SysUserMapper">
+
+    <!--用户注册-->
+    <insert id="userRegisterMapper" parameterType="user">
+        insert into user(uname,upwd) values (#{uname},#{upwd})
+    </insert>
+
+    <!--用户登录-->
+    <select id="userLoginMapper" parameterType="user" resultType="user">
+        select * from user where uname = #{uname} and upwd = #{upwd}
+    </select>
+
+    <!--根据User删除用户-->
+    <delete id="userDeleteByUserMapper" parameterType="user">
+        delete from user where uid=#{uid}
+    </delete>
+
+    <!--根据id查询用户信息-->
+    <select id="selectUserByUidMapper" resultType="user">
+        select * from user where uid=#{uid}
+    </select>
+
+    <!--根据用户名查询用户信息-->
+    <select id="selectUserByUnameMapper" resultType="user">
+        select * from user where uname=#{uname}
+    </select>
+
+    <!--查询所有角色信息-->
+    <select id="selectAllRolesMapper" resultType="role">
+        select * from role
+    </select>
+
+    <!--查询所有光锥信息-->
+    <select id="selectAllLightconeMapper" resultType="Lightcone">
+        select * from lightcone
+    </select>
+
+    <!--查询所有组队信息-->
+    <select id="selectAllGroupsMapper" resultType="group">
+        select * from `group`
+    </select>
+
+    <!--查询所有评论信息-->
+    <select id="selectAllCommentsMapper" resultType="comment">
+        select * from comment
+    </select>
+
+    <!--查询所有评论信息-->
+    <select id="selectAllCommentsWithAvatarMapper" resultType="comment">
+        select cid,user.uname,content,`time`,avatar from comment,user where comment.uid = user.uid
+    </select>
+
+    <!--查询评论信息（按时间排序并限制显示个数）-->
+    <select id="selectCommentsWithLimitMapper" resultType="comment">
+        select * from comment
+                 order by `time`
+                 limit #{s},#{l}
+    </select>
+
+    <select id="selectGroupsByRidMapper" resultType="Group">
+        SELECT t1.*,GROUP_CONCAT(t2.rname) AS rname_list
+        FROM `group` t1
+                 JOIN role t2 ON FIND_IN_SET(t2.rid, t1.roles)
+        WHERE FIND_IN_SET(#{rid}, t1.roles) > 0
+        GROUP BY t1.gid;
+    </select>
+
+    <select id="selectRoleByRidMapper" resultType="Role">
+        select * from role where rid = #{rid}
+    </select>
+
+    <!--根据ID查询光锥信息-->
+    <select id="selectLightconeByRidMapper" resultType="Lightcone">
+        select * from lightcone where lid = #{lid}
+    </select>
+
+    <!--添加用户评论-->
+    <insert id="insertCommentMapper" parameterType="comment">
+        insert into comment(uid,content) values (#{uid},#{content})
+    </insert>
+
+    <!--删除用户评论-->
+    <insert id="deleteCommentByCidMapper" parameterType="comment">
+        delete from comment where cid = #{cid}
+    </insert>
+
+    <!--添加组队信息-->
+    <insert id="insertGroupMapper" parameterType="group">
+        insert into `group`(gname,roles) values (#{gname},#{roles})
+    </insert>
+</mapper>
